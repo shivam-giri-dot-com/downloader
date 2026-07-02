@@ -1,380 +1,292 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My GitHub File Manager</title>
-
+  <title>My File Manager</title>
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      margin: 0;
-      background: linear-gradient(135deg, #eaf4ff, #ffffff);
-      color: #111827;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 1100px;
-      margin: auto;
-      padding: 18px;
-    }
-
-    .header {
-      background: #ffffff;
-      border: 1px solid #dbeafe;
-      border-radius: 18px;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      align-items: center;
-    }
-
-    .header h1 {
-      margin: 0;
-      font-size: 26px;
-      color: #0f62fe;
-    }
-
-    .header p {
-      margin: 6px 0 0;
-      color: #6b7280;
-    }
-
-    .badge {
-      background: #e0f2fe;
-      color: #0369a1;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 13px;
-      white-space: nowrap;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 360px 1fr;
-      gap: 18px;
-      margin-top: 18px;
-    }
-
-    .card {
-      background: #ffffff;
-      border: 1px solid #dbeafe;
-      border-radius: 18px;
-      padding: 18px;
-    }
-
-    .card h2 {
-      margin-top: 0;
-      font-size: 20px;
-    }
-
-    .upload-box {
-      border: 2px dashed #93c5fd;
-      border-radius: 16px;
-      padding: 25px;
-      text-align: center;
-      background: #f8fbff;
-    }
-
-    input[type="file"] {
-      width: 100%;
-      margin: 15px 0;
-    }
-
-    .btn {
-      border: none;
-      border-radius: 12px;
-      padding: 11px 14px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.2s;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary {
-      background: #2563eb;
-      color: white;
-      width: 100%;
-    }
-
-    .btn-download {
-      background: #10b981;
-      color: white;
-    }
-
-    .btn-delete {
-      background: #ef4444;
-      color: white;
-    }
-
-    .status {
-      margin-top: 12px;
-      font-size: 14px;
-      color: #374151;
-    }
-
-    .file-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .file {
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      padding: 14px;
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
-      background: #ffffff;
-    }
-
-    .file-name {
-      font-weight: bold;
-      word-break: break-all;
-    }
-
-    .file-size {
-      font-size: 13px;
-      color: #6b7280;
-      margin-top: 4px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .empty {
-      text-align: center;
-      color: #6b7280;
-      padding: 25px;
-      background: #f9fafb;
-      border-radius: 14px;
-    }
-
-    @media (max-width: 768px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .header h1 {
-        font-size: 22px;
-      }
-
-      .file {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .actions {
-        width: 100%;
-      }
-
-      .actions .btn {
-        width: 50%;
-      }
+    *{box-sizing:border-box;font-family:Arial,sans-serif}
+    body{margin:0;background:#f3f8ff;color:#111827}
+    .app{max-width:1100px;margin:auto;padding:16px}
+    .header,.card{background:#fff;border:1px solid #dbeafe;border-radius:18px;padding:18px}
+    .header{display:flex;justify-content:space-between;gap:12px;align-items:center}
+    h1{margin:0;color:#2563eb;font-size:26px}
+    p{color:#6b7280}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:16px;margin-top:16px}
+    input{width:100%;padding:12px;margin:8px 0;border:1px solid #cbd5e1;border-radius:12px}
+    .upload-box{border:2px dashed #93c5fd;border-radius:16px;padding:20px;text-align:center;background:#f8fbff}
+    .btn{border:0;border-radius:12px;padding:11px 14px;font-weight:bold;cursor:pointer}
+    .primary{background:#2563eb;color:white;width:100%}
+    .green{background:#10b981;color:white}
+    .red{background:#ef4444;color:white}
+    .gray{background:#e5e7eb;color:#111827;width:100%;margin-top:8px}
+    .status{margin-top:10px;font-size:14px;color:#374151}
+    .file-list{display:grid;gap:12px}
+    .file{border:1px solid #e5e7eb;border-radius:14px;padding:14px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+    .file-name{font-weight:bold;word-break:break-all}
+    .file-size{font-size:13px;color:#6b7280;margin-top:4px}
+    .actions{display:flex;gap:8px}
+    .empty{text-align:center;color:#6b7280;padding:25px;background:#f9fafb;border-radius:14px}
+    @media(max-width:768px){
+      .grid{grid-template-columns:1fr}
+      .header{flex-direction:column;align-items:flex-start}
+      h1{font-size:22px}
+      .file{flex-direction:column;align-items:flex-start}
+      .actions{width:100%}
+      .actions .btn{width:50%}
     }
   </style>
 </head>
-
 <body>
-  <div class="app">
-    <div class="header">
-      <div>
-        <h1>My File Manager</h1>
-        <p>Upload, download aur delete PDF, image, video using GitHub.</p>
+
+<div class="app">
+  <div class="header">
+    <div>
+      <h1>My File Manager</h1>
+      <p>PDF, image, video upload/download/delete using GitHub.</p>
+    </div>
+    <b>Private GitHub Storage</b>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>GitHub Token</h2>
+      <input type="password" id="tokenInput" placeholder="Paste new GitHub token here">
+      <button class="btn primary" onclick="saveToken()">Save Token</button>
+      <button class="btn gray" onclick="removeToken()">Remove Token</button>
+
+      <hr>
+
+      <h2>Upload File</h2>
+      <div class="upload-box">
+        <div>📁 Select PDF, Image or Video</div>
+        <input type="file" id="fileInput" accept=".pdf,image/*,video/*">
+        <button class="btn primary" onclick="uploadFile()">Upload File</button>
+        <div class="status" id="status">Max file size: 100MB</div>
       </div>
-      <div class="badge">GitHub Private Storage</div>
     </div>
 
-    <div class="grid">
-      <div class="card">
-        <h2>Upload File</h2>
-
-        <div class="upload-box">
-          <div>📁 Select PDF, Image or Video</div>
-          <input type="file" id="fileInput" accept=".pdf,image/*,video/*" />
-          <button class="btn btn-primary" onclick="uploadFile()">Upload File</button>
-          <div class="status" id="status">Max file size: 100MB</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Uploaded Files</h2>
-        <div id="fileList" class="file-list">
-          <div class="empty">Loading files...</div>
-        </div>
+    <div class="card">
+      <h2>Uploaded Files</h2>
+      <div id="fileList" class="file-list">
+        <div class="empty">Loading files...</div>
       </div>
     </div>
   </div>
+</div>
 
-  <script>
-    const OWNER = "shivam-giri-dot-com";
-    const REPO = "my-file";
-    const FOLDER = "uploads";
-    const TOKEN = "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";
+<script>
+const OWNER = "shivam-giri-dot-com";
+const REPO = "my-file";
+const FOLDER = "uploads";
 
-    const API_BASE = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}`;
+const API_BASE = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}`;
 
-    const statusBox = document.getElementById("status");
-    const fileList = document.getElementById("fileList");
+const statusBox = document.getElementById("status");
+const fileList = document.getElementById("fileList");
 
-    function setStatus(msg) {
-      statusBox.innerText = msg;
+function getToken() {
+  return localStorage.getItem("github_token");
+}
+
+function saveToken() {
+  const token = document.getElementById("tokenInput").value.trim();
+
+  if (!token) {
+    setStatus("Token paste karo.");
+    return;
+  }
+
+  localStorage.setItem("github_token", token);
+  document.getElementById("tokenInput").value = "";
+  setStatus("Token saved in browser.");
+  loadFiles();
+}
+
+function removeToken() {
+  localStorage.removeItem("github_token");
+  setStatus("Token removed.");
+  fileList.innerHTML = `<div class="empty">Token removed. New token save karo.</div>`;
+}
+
+function setStatus(msg) {
+  statusBox.innerText = msg;
+}
+
+async function uploadFile() {
+  const token = getToken();
+
+  if (!token) {
+    setStatus("Pehle token save karo.");
+    return;
+  }
+
+  const file = document.getElementById("fileInput").files[0];
+
+  if (!file) {
+    setStatus("Please select a file first.");
+    return;
+  }
+
+  if (file.size > 100 * 1024 * 1024) {
+    setStatus("File 100MB se kam hona chahiye.");
+    return;
+  }
+
+  setStatus("Uploading...");
+
+  try {
+    const base64 = await toBase64(file);
+    const content = base64.split(",")[1];
+
+    const url = `${API_BASE}/${encodeURIComponent(file.name)}`;
+
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Accept": "application/vnd.github+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: `Upload ${file.name}`,
+        content: content
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      setStatus("File uploaded successfully.");
+      document.getElementById("fileInput").value = "";
+      loadFiles();
+    } else {
+      setStatus("Upload failed: " + data.message);
     }
+  } catch (e) {
+    setStatus("Upload error: " + e.message);
+  }
+}
 
-    async function uploadFile() {
-      const file = document.getElementById("fileInput").files[0];
+function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
-      if (!file) {
-        setStatus("Please select a file first.");
-        return;
+async function loadFiles() {
+  const token = getToken();
+
+  if (!token) {
+    fileList.innerHTML = `<div class="empty">Pehle token save karo.</div>`;
+    return;
+  }
+
+  fileList.innerHTML = `<div class="empty">Loading files...</div>`;
+
+  try {
+    const res = await fetch(API_BASE, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Accept": "application/vnd.github+json"
       }
+    });
 
-      if (file.size > 100 * 1024 * 1024) {
-        setStatus("File 100MB se kam hona chahiye.");
-        return;
-      }
+    const files = await res.json();
 
-      setStatus("Uploading...");
-
-      const base64 = await toBase64(file);
-      const content = base64.split(",")[1];
-
-      const url = `${API_BASE}/${encodeURIComponent(file.name)}`;
-
-      const res = await fetch(url, {
-        method: "PUT",
-        headers: {
-          Authorization: `token ${TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: `Upload ${file.name}`,
-          content: content,
-        }),
-      });
-
-      if (res.ok) {
-        setStatus("File uploaded successfully.");
-        document.getElementById("fileInput").value = "";
-        loadFiles();
-      } else {
-        const err = await res.json();
-        setStatus("Upload failed: " + err.message);
-      }
+    if (!res.ok) {
+      fileList.innerHTML = `<div class="empty">Files load failed: ${files.message}</div>`;
+      return;
     }
 
-    function toBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
+    const visibleFiles = files.filter(file => file.name !== ".gitkeep");
+
+    if (!visibleFiles.length) {
+      fileList.innerHTML = `<div class="empty">No files uploaded yet.</div>`;
+      return;
     }
 
-    async function loadFiles() {
-      fileList.innerHTML = `<div class="empty">Loading files...</div>`;
+    fileList.innerHTML = "";
 
-      const res = await fetch(API_BASE, {
-        headers: {
-          Authorization: `token ${TOKEN}`,
-        },
-      });
+    visibleFiles.forEach(file => {
+      const div = document.createElement("div");
+      div.className = "file";
 
-      if (!res.ok) {
-        fileList.innerHTML = `<div class="empty">Files load nahi ho rahi. Token/repo check karo.</div>`;
-        return;
-      }
+      div.innerHTML = `
+        <div>
+          <div class="file-name">${file.name}</div>
+          <div class="file-size">${formatSize(file.size)}</div>
+        </div>
+        <div class="actions">
+          <button class="btn green" onclick="downloadFile('${file.download_url}')">Download</button>
+          <button class="btn red" onclick="deleteFile('${file.name}', '${file.sha}')">Delete</button>
+        </div>
+      `;
 
-      const files = await res.json();
-      const visibleFiles = files.filter(file => file.name !== ".gitkeep");
+      fileList.appendChild(div);
+    });
 
-      if (!visibleFiles.length) {
-        fileList.innerHTML = `<div class="empty">No files uploaded yet.</div>`;
-        return;
-      }
+  } catch (e) {
+    fileList.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
+  }
+}
 
-      fileList.innerHTML = "";
+function downloadFile(url) {
+  window.open(url, "_blank");
+}
 
-      visibleFiles.forEach(file => {
-        const div = document.createElement("div");
-        div.className = "file";
+async function deleteFile(filename, sha) {
+  const token = getToken();
 
-        div.innerHTML = `
-          <div>
-            <div class="file-name">${file.name}</div>
-            <div class="file-size">${formatSize(file.size)}</div>
-          </div>
-          <div class="actions">
-            <button class="btn btn-download" onclick="downloadFile('${file.download_url}')">Download</button>
-            <button class="btn btn-delete" onclick="deleteFile('${file.name}', '${file.sha}')">Delete</button>
-          </div>
-        `;
+  if (!token) {
+    setStatus("Pehle token save karo.");
+    return;
+  }
 
-        fileList.appendChild(div);
-      });
+  if (!confirm("Delete this file?")) return;
+
+  setStatus("Deleting...");
+
+  try {
+    const url = `${API_BASE}/${encodeURIComponent(filename)}`;
+
+    const res = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Accept": "application/vnd.github+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: `Delete ${filename}`,
+        sha: sha
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      setStatus("File deleted.");
+      loadFiles();
+    } else {
+      setStatus("Delete failed: " + data.message);
     }
+  } catch (e) {
+    setStatus("Delete error: " + e.message);
+  }
+}
 
-    function downloadFile(url) {
-      window.open(url, "_blank");
-    }
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + " B";
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+  return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+}
 
-    async function deleteFile(filename, sha) {
-      if (!confirm("Delete this file?")) return;
+loadFiles();
+</script>
 
-      setStatus("Deleting...");
-
-      const url = `${API_BASE}/${encodeURIComponent(filename)}`;
-
-      const res = await fetch(url, {
-        method: "DELETE",
-        headers: {
-          Authorization: `token ${TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: `Delete ${filename}`,
-          sha: sha,
-        }),
-      });
-
-      if (res.ok) {
-        setStatus("File deleted.");
-        loadFiles();
-      } else {
-        const err = await res.json();
-        setStatus("Delete failed: " + err.message);
-      }
-    }
-
-    function formatSize(bytes) {
-      if (bytes < 1024) return bytes + " B";
-      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
-      return (bytes / (1024 * 1024)).toFixed(1) + " MB";
-    }
-
-    loadFiles();
-  </script>
 </body>
 </html>
-
-
